@@ -2,15 +2,12 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
 } from '@/components/ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { Product } from '@/types/Product';
-import { ProductEditForm } from './ProductEditForm';
 import { Button } from '@/components/ui/button';
 import { KeyboardEvent, useState } from 'react';
-import { adminApi } from '@/services/adminApi';
 
 type Props = {
     open: boolean;
@@ -30,8 +27,9 @@ export const ProductDeleteDialog = ({
 
     const deleteProduct = async () => {
         setLoading(true);
-        await adminApi.deleteProduct(category_id, product.id);
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
         onOpenChange(false);
         refreshLoad();

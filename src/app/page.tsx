@@ -1,8 +1,6 @@
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
-import { ProductSkeleton } from '@/components/products/ProductSkeleton';
 import { ProductTabs } from '@/components/products/ProductTabs';
-import { Suspense } from 'react';
 
 const Page = () => {
     return (

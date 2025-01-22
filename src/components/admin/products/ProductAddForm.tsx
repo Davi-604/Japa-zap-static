@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { adminApi } from '@/services/adminApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { set, z } from 'zod';
 import { ProductAddFormField } from './ProductAddFormField';
 import { productSchema } from '@/schemas/productSchema';
 import { useState } from 'react';
@@ -30,21 +29,12 @@ export const ProductAddForm = ({ onFinish, category_id, refreshLoad }: Props) =>
 
     const onSubmit = async (values: z.infer<typeof productSchema>) => {
         setLoading(true);
-        const newProduct = await adminApi.addProduct(category_id, {
-            image: values.imageField,
-            name: values.nameField,
-            description: values.descriptionField,
-            price: parseFloat(values.priceField.replace(',', '.')),
-        });
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
-        if (!newProduct) {
-            alert('Não foi possível criar o produto.');
-            onFinish(false);
-        } else {
-            onFinish(false);
-            refreshLoad();
-        }
+        onFinish(false);
+        refreshLoad();
     };
 
     return (

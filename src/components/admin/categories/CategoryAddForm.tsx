@@ -8,8 +8,6 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { adminApi } from '@/services/adminApi';
-import { api } from '@/services/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -17,7 +15,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const addSchema = z.object({
-    nameField: z.string().min(2, 'Mínimo de dois caracteres'),
+    nameField: z
+        .string()
+        .min(2, 'Mínimo de dois caracteres')
+        .max(20, 'Máximo de 20 caracteres'),
 });
 type Props = {
     onFinish: (value: boolean) => void;
@@ -31,20 +32,14 @@ export const CategoryAddForm = ({ onFinish, refreshLoad }: Props) => {
         defaultValues: { nameField: '' },
     });
 
-    const onSubmit = async (values: z.infer<typeof addSchema>) => {
+    const onSubmit = async () => {
         setLoading(true);
-        const newCategory = await adminApi.addCategory({
-            name: values.nameField,
-        });
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
-        if (!newCategory) {
-            alert('Não foi possível criar a categoria.');
-            onFinish(false);
-        } else {
-            onFinish(false);
-            refreshLoad();
-        }
+        onFinish(false);
+        refreshLoad();
     };
 
     return (

@@ -8,8 +8,7 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import { Product } from '@/types/Product';
 import { Button } from '@/components/ui/button';
 import { KeyboardEvent, useEffect, useState } from 'react';
-import { adminApi } from '@/services/adminApi';
-import { api } from '@/services/api';
+import { productsData } from '@/data/products';
 
 type Props = {
     open: boolean;
@@ -28,8 +27,9 @@ export const CategoryDeleteDialog = ({
 
     const deleteProduct = async () => {
         setLoading(true);
-        await adminApi.deleteCategory(category_id);
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
         onOpenChange(false);
         refreshLoad();
@@ -37,9 +37,16 @@ export const CategoryDeleteDialog = ({
 
     const checkProducts = async () => {
         setLoading(true);
-        const products = await api.getAllProducts(category_id);
-        setLoading(false);
-        if (products.length === 0) return setHasProducts(false);
+
+        setTimeout(() => {
+            if (productsData.some((product) => product.category_id === category_id)) {
+                setHasProducts(true);
+                setLoading(false);
+            } else {
+                setHasProducts(false);
+            }
+            setLoading(false);
+        }, 700);
     };
     useEffect(() => {
         checkProducts();

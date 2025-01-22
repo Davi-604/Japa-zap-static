@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { adminApi } from '@/services/adminApi';
 import { Product } from '@/types/Product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -39,21 +38,12 @@ export const ProductEditForm = ({
         const formatedPrice = values.priceField?.replace(',', '.');
 
         setLoading(true);
-        const editedProduct = await adminApi.editProduct(category_id, product.id, {
-            image: values.imageField,
-            name: values.nameField,
-            description: values.descriptionField,
-            price: parseFloat(formatedPrice ? formatedPrice : ''),
-        });
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
-        if (!editedProduct) {
-            alert('Não foi possível editar o produto.');
-            onFinish(false);
-        } else {
-            onFinish(false);
-            refreshLoad();
-        }
+        onFinish(false);
+        refreshLoad();
     };
 
     return (

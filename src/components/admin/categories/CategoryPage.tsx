@@ -1,7 +1,6 @@
 'use client';
 
 import { ProductEmpty } from '@/components/products/ProductEmpty';
-import { api } from '@/services/api';
 import { Category } from '@/types/Category';
 import { useEffect, useState } from 'react';
 import { CategoryAddBtn } from './CategoryAddBtn';
@@ -10,6 +9,7 @@ import { CategoryTableSkeleton } from './CategoryTableSkeleton';
 import { CategoryAddDialog } from './CategoryAddDialog';
 import { CategoryEditDialog } from './CategoryEditDialog';
 import { CategoryDeleteDialog } from './CategoryDeleteDialog';
+import { categoriesData } from '@/data/categories';
 
 export const CategoryPage = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -21,10 +21,11 @@ export const CategoryPage = () => {
 
     const getCategories = async () => {
         setLoading(true);
-        const req = await api.getAllCategories();
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
-        setCategories(req);
+        setCategories(categoriesData);
     };
     useEffect(() => {
         getCategories();

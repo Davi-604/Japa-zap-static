@@ -6,12 +6,12 @@ import { Category } from '@/types/Category';
 import { ProductEmpty } from '@/components/products/ProductEmpty';
 import { ProductTable } from './ProductTable';
 import { Product } from '@/types/Product';
-import { api } from '@/services/api';
 import { ProductTableSkeleton } from './ProductTableSkeleton';
 import { ProductAddBtn } from './ProductAddBtn';
 import { ProductAddDialog } from './ProductAddDialog';
 import { ProductEditDialog } from './ProductEditDialog';
 import { ProductDeleteDialog } from './ProductDeleteDialog';
+import { productsData } from '@/data/products';
 
 export const ProductPage = () => {
     const [selectedCategory, setSelectedCategory] = useState<Category | null>();
@@ -26,14 +26,22 @@ export const ProductPage = () => {
         setProducts([]);
         setLoading(true);
         if (selectedCategory) {
-            const req = await api.getAllProducts(selectedCategory.id);
-            setLoading(false);
-            setProducts(req);
+            setTimeout(() => {
+                setLoading(false);
+                setProducts(
+                    productsData.filter(
+                        (product) => product.category_id === selectedCategory.id
+                    ) as Product[]
+                );
+            }, 700);
         }
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
     };
     useEffect(() => {
         getProducts();
+        console.log(products);
     }, [selectedCategory]);
 
     return (
@@ -92,7 +100,7 @@ export const ProductPage = () => {
                 </>
             )}
 
-            {products.length === 0 && loading && (
+            {products.length === 0 && loading && selectedCategory && (
                 <div className="mt-10">
                     <ProductTableSkeleton />
                     <ProductTableSkeleton />

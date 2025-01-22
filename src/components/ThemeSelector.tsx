@@ -29,19 +29,19 @@ export const ThemeSelector = () => {
                     onClick={() => setTheme('light')}
                     className="flex items-center gap-3"
                 >
-                    <SunIcon /> Light
+                    <SunIcon /> Claro
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={() => setTheme('dark')}
                     className="flex items-center gap-3"
                 >
-                    <MoonIcon /> Dark
+                    <MoonIcon /> Escuro
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={() => setTheme('system')}
                     className="flex items-center gap-3"
                 >
-                    <LaptopIcon /> System
+                    <LaptopIcon /> Sistema
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

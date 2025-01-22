@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { api } from '@/services/api';
+import { categoriesData } from '@/data/categories';
 import { Category } from '@/types/Category';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,9 +23,9 @@ export const CategorySelector = ({ onChange }: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
 
     const getCategories = async () => {
-        const req = await api.getAllCategories();
-
-        setCategories(req);
+        setTimeout(() => {
+            setCategories(categoriesData);
+        }, 700);
     };
 
     useEffect(() => {

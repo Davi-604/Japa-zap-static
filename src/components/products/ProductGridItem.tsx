@@ -31,7 +31,7 @@ export const ProductGridItem = ({ product }: Props) => {
                 <DialogTrigger>
                     <div className="overflow-hidden rounded-lg cursor-pointer lg:hover:scale-110 transition-all ease-in">
                         <img
-                            className="w-full h-32 object-cover"
+                            className="w-[200px] h-32 object-cover"
                             alt={product.name}
                             src={product.image}
                         />
@@ -45,7 +45,7 @@ export const ProductGridItem = ({ product }: Props) => {
                     </DialogTitle>
                     <div className="overflow-hidden rounded-lg ">
                         <img
-                            className="w-full h-full object-cover"
+                            className="w-full h-[300px] object-cover"
                             alt={product.name}
                             src={product.image}
                         />

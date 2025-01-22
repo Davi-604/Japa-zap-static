@@ -13,8 +13,6 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useEffect, useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import { adminApi } from '@/services/adminApi';
-import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 
 export const LoginCard = () => {
@@ -34,14 +32,17 @@ export const LoginCard = () => {
 
         if (password.trim()) {
             setLoading(true);
-            const token = await adminApi.login(password);
-            setLoading(false);
 
-            if (token) {
-                setCookie('token', token);
-                router.push('/admin/products');
+            if (password === '1234') {
+                setTimeout(() => {
+                    setLoading(false);
+                    router.push('/admin/products');
+                }, 300);
             } else {
-                setWarning('Senha incorreta');
+                setTimeout(() => {
+                    setLoading(false);
+                    setWarning('Senha incorreta');
+                }, 700);
             }
         } else {
             setWarning('Preencha o campo!');

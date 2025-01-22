@@ -8,7 +8,6 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { adminApi } from '@/services/adminApi';
 import { Category } from '@/types/Category';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -16,8 +15,12 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const addSchema = z.object({
-    nameField: z.string().optional(),
+const editSchema = z.object({
+    nameField: z
+        .string()
+        .min(2, 'Mínimo de dois caracteres')
+        .max(20, 'Máximo de 20 caracteres')
+        .optional(),
 });
 type Props = {
     onFinish: (value: boolean) => void;
@@ -27,25 +30,19 @@ type Props = {
 export const CategoryEditForm = ({ onFinish, refreshLoad, category }: Props) => {
     const [loading, setLoading] = useState(false);
 
-    const form = useForm<z.infer<typeof addSchema>>({
-        resolver: zodResolver(addSchema),
+    const form = useForm<z.infer<typeof editSchema>>({
+        resolver: zodResolver(editSchema),
         defaultValues: { nameField: category.name },
     });
 
-    const onSubmit = async (values: z.infer<typeof addSchema>) => {
+    const onSubmit = async (values: z.infer<typeof editSchema>) => {
         setLoading(true);
-        const editedCategory = await adminApi.editCategory(category.id, {
-            name: values.nameField,
-        });
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 700);
 
-        if (!editedCategory) {
-            alert('Não foi possível editar a categoria.');
-            onFinish(false);
-        } else {
-            onFinish(false);
-            refreshLoad();
-        }
+        onFinish(false);
+        refreshLoad();
     };
 
     return (
