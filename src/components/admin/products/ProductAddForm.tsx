@@ -1,13 +1,20 @@
 import { Button } from '@/components/ui/button';
-import { Form, FormField } from '@/components/ui/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { set, z } from 'zod';
-import { ProductAddFormField } from './ProductAddFormField';
+import { ControllerRenderProps, useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { productSchema } from '@/schemas/productSchema';
 import { useState } from 'react';
-import { ProductTextAreaField } from './ProductTextAreaField';
-import { ProductAddImageField } from './ProductAddImageField';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useDropzone } from 'react-dropzone';
 
 type Props = {
     onFinish: (value: boolean) => void;
@@ -16,6 +23,7 @@ type Props = {
 };
 export const ProductAddForm = ({ onFinish, category_id, refreshLoad }: Props) => {
     const [loading, setLoading] = useState(false);
+    const [photoPreviewUrl, setPhotoPreviewUrl] = useState('');
 
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
@@ -37,6 +45,28 @@ export const ProductAddForm = ({ onFinish, category_id, refreshLoad }: Props) =>
         refreshLoad();
     };
 
+    const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
+        maxFiles: 1,
+        accept: {
+            'image/jpg': ['.jpg'],
+            'image/jpeg': ['.jpeg'],
+            'image/png': ['.png'],
+        },
+        onDrop: (files) => handleChangeImage(files),
+    });
+
+    const handleChangeImage = (
+        files: File[],
+        field?: ControllerRenderProps<z.infer<typeof productSchema>>
+    ) => {
+        if (files.length > 0) {
+            const file = files[0];
+            setPhotoPreviewUrl(URL.createObjectURL(file));
+            form.clearErrors('imageField');
+            field?.onChange(file);
+        }
+    };
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -45,53 +75,109 @@ export const ProductAddForm = ({ onFinish, category_id, refreshLoad }: Props) =>
                         control={form.control}
                         name="nameField"
                         render={({ field }) => (
-                            <ProductAddFormField
-                                label="Nome"
-                                name="nameField"
-                                placeholder="Digite o nome do produto"
-                                field={field}
-                                form={form}
-                                focus
-                            />
+                            <FormItem>
+                                <FormLabel>Nome</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        className="text-ellipsis whitespace-normal transition-all ease-in"
+                                        placeholder="Digite o nome do produto"
+                                        autoFocus
+                                        onChange={(e) => {
+                                            field.onChange(e.target.value);
+                                            form.clearErrors('nameField');
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormMessage className="text-yellow-500" />
+                            </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name="descriptionField"
                         render={({ field }) => (
-                            <ProductTextAreaField
-                                label="Descrição"
-                                name="descriptionField"
-                                field={field}
-                                form={form}
-                            />
+                            <FormItem>
+                                <FormLabel>Descrição</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        className="text-ellipsis whitespace-normal transition-colors ease-in"
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            form.clearErrors('descriptionField');
+                                        }}
+                                        value={field.value as string}
+                                    />
+                                </FormControl>
+                                <FormMessage className="text-yellow-500" />
+                            </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name="imageField"
                         render={({ field }) => (
-                            <ProductAddImageField
-                                name="imageField"
-                                label="Imagem"
-                                field={field}
-                                form={form}
-                            />
+                            <FormItem>
+                                <FormLabel>Imagem</FormLabel>
+                                <FormControl>
+                                    <div
+                                        className={`h-36 max-w-full border-4 border-muted rounded-lg border-dashed flex items-center justify-center cursor-pointer
+                                hover:bg-muted hover:border-primary transition-colors ease-in-out
+                                ${isDragActive ? 'bg-muted border-primary' : ''}`}
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        {!photoPreviewUrl.trim() && (
+                                            <p className="text-sm text-muted-foreground m-3">
+                                                {!isDragActive
+                                                    ? 'Escolha ou arraste a imagem para aqui'
+                                                    : 'Solte a imagem aqui'}
+                                            </p>
+                                        )}
+                                        {photoPreviewUrl.trim() && (
+                                            <img
+                                                className="rounded-lg h-full w-full object-cover"
+                                                src={photoPreviewUrl}
+                                            />
+                                        )}
+                                    </div>
+                                </FormControl>
+                                <FormMessage className="text-yellow-500" />
+                            </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name="priceField"
                         render={({ field }) => (
-                            <ProductAddFormField
-                                name="priceField"
-                                label="Preço"
-                                placeholder="Digite o preço do produto"
-                                field={field}
-                                form={form}
-                                priceField
-                                onSubmit={onSubmit}
-                            />
+                            <FormItem>
+                                <FormLabel>Preço</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        className="text-ellipsis whitespace-normal transition-all ease-in"
+                                        placeholder="Digite o preço do produto"
+                                        onChange={(e) => {
+                                            field.onChange(
+                                                e.target.value.replace(/[^0-9,]/g, '')
+                                            );
+                                            form.clearErrors('nameField');
+                                        }}
+                                        value={
+                                            field.value
+                                                ? field.value.replace('.', ',')
+                                                : ''
+                                        }
+                                        onKeyUp={(e) => {
+                                            if (e.code.toLowerCase() === 'enter') {
+                                                e.preventDefault();
+                                                form.handleSubmit(onSubmit)();
+                                            }
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormMessage className="text-yellow-500" />
+                            </FormItem>
                         )}
                     />
                     <div className="flex items-center justify-between mt-5 ">
