@@ -23,4 +23,4 @@ Essa é uma versão estática do projeto **JapaZAP** que foi criada como o intui
 
 -   🗒️ Login para o administrador **(Senha: 1234)**: [https://japa-zap-static.vercel.app/login](https://japa-zap-static.vercel.app/login)
 
--   💻 Painel Administrativo: [https://japa-zap-static.vercel.app/login](https://japa-zap-static.vercel.app/admin/products)
+-   💻 Painel Administrativo: [https://japa-zap-static.vercel.app/admin/products](https://japa-zap-static.vercel.app/admin/products)
