@@ -19,8 +19,8 @@ Essa é uma versão estática do projeto **JapaZAP** que foi criada como o intui
 
 ## Links do projeto 🌐
 
--   🍱 Menu principal:
+-   🍱 Menu principal: [https://japa-zap-static.vercel.app](https://japa-zap-static.vercel.app/)
 
--   🗒️ Login para o administrador **(Senha: 1234)**:
+-   🗒️ Login para o administrador **(Senha: 1234)**: [https://japa-zap-static.vercel.app/login](https://japa-zap-static.vercel.app/login)
 
--   💻 Painel Administrativo:
+-   💻 Painel Administrativo: [https://japa-zap-static.vercel.app/login](https://japa-zap-static.vercel.app/admin/products)
